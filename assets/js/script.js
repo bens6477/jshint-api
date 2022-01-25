@@ -18,6 +18,7 @@ async function getStatus(e) {
     if (response.ok) {
         displayStatus(data);
     } else {
+        displayException(data);
         throw new Error(data.error);
     }
 }
@@ -37,8 +38,6 @@ function displayStatus(data) {
 // Push each value into a temporary array
 // Convert the array back to a string
 function processOptions(form) {
-    console.log(form)
-
     let optArray = [];
     for (let entry of form.entries()) {
         console.log(entry);
@@ -48,8 +47,6 @@ function processOptions(form) {
         };
     };
     
-    console.log(optArray);
-
     form.delete("options");
     form.append("options", optArray.join());
 
@@ -80,6 +77,7 @@ async function postForm(e) {
     if (response.ok) {
         displayErrors(data);
     } else {
+        displayException(data);
         throw new Error(data.error);
     }
 }
@@ -102,3 +100,17 @@ function displayErrors(data) {
     document.getElementById("results-content").innerHTML = results;
     resultsModal.show();
 };
+
+
+function displayException(data) {
+    let heading = "An Exception Occurred";
+    let results = `<div>The API returned the following error data.</div>`;
+    results += `<div>Status code: <strong><span class="status_code">${data.status_code}</span></strong></div>`;
+    results += `<div>Error number: <strong><span class="error_no">${data.error_no}</span></strong></div>`;
+    results += `<div>Error text: <strong><span class="error">${data.error}</span></strong></div>`;
+
+    document.getElementById("resultsModalTitle").innerText = heading;
+    document.getElementById("results-content").innerHTML = results;
+    
+    resultsModal.show();
+}
