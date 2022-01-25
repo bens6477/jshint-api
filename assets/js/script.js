@@ -32,9 +32,32 @@ function displayStatus(data) {
     resultsModal.show();
 }
 
+// Function to:
+// Iterate through options,
+// Push each value into a temporary array
+// Convert the array back to a string
+function processOptions(form) {
+    console.log(form)
+
+    let optArray = [];
+    for (let entry of form.entries()) {
+        console.log(entry);
+
+        if (entry[0] === "options") {
+            optArray.push(entry[1]);
+        };
+    };
+    
+    console.log(optArray);
+
+    form.delete("options");
+    form.append("options", optArray.join());
+
+    return form;
+}
 
 async function postForm(e) {
-    const form = new FormData(document.getElementById("checksform"));
+    const form = processOptions(new FormData(document.getElementById("checksform")));
 
     let init = {
         method: "POST",
@@ -45,7 +68,8 @@ async function postForm(e) {
     }
 
     // Without the body:form key:value pair above, add the form elements as follows:
-    // for (let e of form.entries()) {
+    // for (let entry of form.entries()) {
+    //     console.log(entry);
     //     initObject[e[0]] = e[1];
     // }    
 
